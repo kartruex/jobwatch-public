@@ -1,0 +1,164 @@
+# jobwatch — все настройки здесь. Код трогать не нужно.
+
+[search]
+# Роль. Совпадение в заголовке весит больше, чем в тексте.
+role_keywords = [
+  "technical support", "support engineer", "integration", "implementation",
+  "solutions engineer", "customer engineer", "api support", "application support",
+  "technical account", "cloud support", "identity", "iam", "onboarding specialist",
+  "service desk", "customer success engineer", "sales engineer", "pre-sales",
+  "presales", "support specialist", "product support", "support analyst",
+  "technical specialist", "technical consultant", "solutions consultant", "it support",
+  "helpdesk", "help desk", "systems administrator", "sysadmin", "application engineer",
+  "technical customer success", "noc engineer", "onboarding manager",
+  # русские корни для hh.ru — ловят любые окончания
+  "поддержк", "интеграц", "внедрен", "сопровожден", "администратор систем",
+  "системный администратор", "инженер поддержки",
+]
+# Навыки — каждое совпадение немного поднимает вакансию (максимум +5).
+skills = [
+  "rest api", "sql", "postman", "swagger", "saas", "b2b", "troubleshoot", "json",
+  "webhook", "linux", "jira", "zendesk", "hubspot", "sso", "oauth", "confluence",
+]
+# Слово в заголовке — вакансия отбрасывается сразу.
+title_stop = [
+  "sales representative", "sales manager", "sales executive", "inside sales",
+  "sales development", "account executive", "recruiter", "marketing", "designer",
+  "copywriter", "intern", "internship", "content writer", "bdr", "sdr",
+  "frontend developer", "data scientist",
+  "оператор", "продаж", "колл-центр", "call-центр", "стажер", "стажёр", "курьер",
+  "кассир", "менеджер по работе с клиентами",
+]
+
+min_score = 6         # ниже — не показывать
+letter_score = 9      # от этого балла готовить черновик письма
+max_age_days = 21     # старше — не показывать (если дата известна)
+require_title_match = true   # роль должна быть в заголовке; совпадение в тексте — только бонус
+telegram_top = 8      # сколько лучших вакансий присылать в Telegram за раз
+
+[location]
+# Логика: пропускаем только то, что доступно из Вьетнама.
+# Поле «локация» с конкретной страной или городом (Italy, USA, Berlin) — отсеивается.
+# Исключение: в тексте упомянуты релокация или визовая поддержка.
+
+# Локация подходит — бонус «глобальный найм».
+accepted = [
+  "worldwide", "anywhere", "global", "work from anywhere", "apac", "asia",
+  "asia pacific", "asia-pacific", "southeast asia", "vietnam", "gmt+7", "utc+7",
+  "international", "internationally", "outside the us", "outside of the us", "non-us",
+]
+# Регион, куда нанимают не всегда — не отсеиваем, но опускаем и помечаем.
+soft = ["europe", "emea", "eu", "european union", "cet", "eet", "european time zones"]
+soft_penalty = 2   # увеличьте, если EMEA-вакансий слишком много
+# Фразы в тексте, которые означают реальный глобальный найм (описание компании не считается).
+good_text = [
+  "hire globally", "hiring globally", "anywhere in the world", "work from anywhere",
+  "any country", "fully distributed team", "hire through deel", "via deel", "remote.com",
+]
+# Если в тексте есть — вакансию с конкретной страной не отсеиваем, а помечаем.
+relocation_phrases = [
+  "visa sponsorship", "relocation support", "relocation package", "sponsor visas",
+  "we sponsor", "relocation assistance",
+]
+# Явные запреты в начале описания — отсев.
+blocked_phrases = [
+  "us only", "usa only", "u.s. only", "united states only", "must be located in the us",
+  "must reside in the us", "us-based only", "canada only", "uk only", "eu only",
+  "must be based in the eu", "eligible to work in the us", "us citizens",
+  "must have the right to work in the uk", "security clearance",
+  "u.s.-based", "u.s. based", "us-based", "us based", "based in the us",
+  "based in the u.s.", "located in the us", "location: remote, u.s.",
+]
+
+[timezone]
+# Работа по американскому времени — для GMT+7 это ночь.
+penalty = [
+  "est hours", "pst hours", "us business hours", "us time zone", "us timezone",
+  "eastern time", "pacific time", "central time", "overlap with est",
+  "overlap with pst", "cst hours",
+]
+bonus = ["gmt+7", "utc+7", "asia timezone", "apac hours", "any time zone", "async", "flexible hours"]
+
+[industry]
+# Отбрасывать совсем.
+drop = ["igaming", "i-gaming", "casino", "sportsbook", "betting", "gambling",
+        "гемблинг", "беттинг", "казино", "букмекер"]
+# Не отбрасывать, но опускать ниже.
+penalty = ["crypto", "web3", "blockchain", "forex", "cfd", "nft", "криптовалют", "форекс"]
+penalty_points = 3
+
+[languages]
+# Роли для русскоговорящих — ваше прямое преимущество.
+russian = [
+  "russian speaker", "russian-speaking", "fluent in russian", "fluent russian",
+  "native russian", "russian and english", "russian language",
+]
+# Китайский — бонус поменьше: часто требуют B2+, проверяйте уровень.
+chinese = ["mandarin", "chinese speaker", "chinese-speaking", "fluent chinese", "fluent in chinese"]
+
+[salary]
+# Годовые суммы в USD. Если зарплата в вакансии указана и её максимум ниже min —
+# вакансия отбрасывается. Если минимум выше good — бонус. Без зарплаты — нейтрально.
+min_annual_usd = 24000    # ≈ $2000 в месяц
+good_annual_usd = 36000   # ≈ $3000 в месяц
+
+[companies]
+# Компании, которые не показывать никогда (в нижнем регистре).
+blocklist = []
+# Если компания есть в tracker.csv со статусом — не показывать её N дней.
+cooldown_days = 30
+
+[seniority]
+penalty = ["principal", "staff", "head of", "director", "vp"]
+
+[sources]
+himalayas_pages = 8    # по 20 вакансий на страницу
+
+[hh]
+# hh.ru: русскоязычные удалённые вакансии. Зарплата на hh указана в месяц в рублях.
+enabled = true
+queries = [
+  "специалист технической поддержки", "инженер технической поддержки",
+  "инженер по интеграциям", "специалист по внедрению", "technical support engineer",
+  "integration engineer", "support engineer", "L2 поддержка",
+]
+period_days = 14
+min_monthly_rub = 110000   # ниже — отсев (если зарплата указана)
+rub_per_usd = 84           # для пересчёта в отчёте
+bonus = 2                  # бонус русскоязычным вакансиям
+contact_email = "you@example.com"   # hh.ru asks for a contact in the User-Agent
+
+[followup]
+after_days = 7      # через сколько дней без ответа напомнить
+remind_until = 14   # после этого срока не напоминать
+
+[experience]
+# У вас около 5,5 лет. Если вакансия требует больше max_years — штраф, но не отсев.
+max_years = 6
+penalty = 3
+
+[weekly]
+# День недельной сводки в Telegram: 0 = понедельник ... 4 = пятница.
+summary_weekday = 4
+
+[letter]
+resume_file = "CV.pdf"
+
+[companies_direct]
+# Прямой сбор с карьерных страниц выбранных компаний.
+# Как найти slug: откройте страницу вакансий компании и посмотрите адрес.
+#   boards.greenhouse.io/<slug>  или  job-boards.greenhouse.io/<slug>  → ats = "greenhouse"
+#   jobs.lever.co/<slug>                                                 → ats = "lever"
+#   jobs.ashbyhq.com/<slug>                                              → ats = "ashby"
+#   <slug>.recruitee.com                                                 → ats = "recruitee"
+#   <slug>.jobs.personio.de                                              → ats = "personio"
+#   jobs.smartrecruiters.com/<slug>                                      → ats = "smartrecruiters"
+# Если компания использует другую систему (Workday, SmartRecruiters и т. п.) — пропустите её.
+remote_only = true    # показывать с карьерных страниц только удалённые вакансии
+boards = [
+  # { name = "Example Co", ats = "greenhouse", slug = "exampleco" },
+  # { name = "Another", ats = "lever", slug = "another" },
+]
+
+[maintenance]
+letters_keep_days = 30   # черновики писем старше этого удаляются
